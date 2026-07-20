@@ -1,0 +1,31 @@
+# Canonical DVSIB paper sweep: sigma x {0.0, 0.1, 0.2, 0.3, 0.4, 0.5}, alpha x {0.0, 1.0},
+# neg_mode x {traj, time}, kz=8, 15 replicates each, 100 epochs.
+#
+# Before submitting, set DATA_ROOT to the directory containing single_pendulum_all
+# and phys_vars.npy (run: python data.py --all --root data/ from inside dvsib_pendulum_experiments/).
+# Also create an output directory for the HDF5 result files.
+#
+# Submit all 4 tasks at once:
+#   mkdir -p results
+#   sbatch --array=0-3 jobs/submit_array.sh jobs/params_paper.txt
+#
+# Each line writes to a separate --outfile so array tasks never race on the same HDF5.
+#
+# Fields:
+#   --root_dir      directory containing single_pendulum_all and phys_vars.npy
+#   --outfile       output HDF5 path
+#   --ndims         latent dimensionality (kz)
+#   --num_frames    frames per sliding window
+#   --samples_n     number of training trajectories (max 1000; trials 1000-1200 are test)
+#   --sigmas        noise amplitudes to sweep
+#   --ou_alphas     OU memory parameters to sweep (0=white noise, 1=static)
+#   --neg_modes     InfoNCE negative set: 'traj' (within-traj) or 'time' (cross-traj, same time)
+#   --reps          independent random repetitions per condition
+#   --epochs        training epochs per run
+#   --traj_sampler  'full' (all windows per trajectory) or 'grouped' (random subset)
+#   --probe_every   train theta prober every N epochs (0 to disable)
+
+--root_dir $DATA_ROOT --outfile results/paper_traj_kz8_oua0.h5  --ndims 8 --num_frames 2 --samples_n 1000 --sigmas 0.5 0.4 0.3 0.2 0.1 0.0 --ou_alphas 0.0 --neg_modes traj --reps 15 --epochs 100 --traj_sampler full --probe_every 2
+--root_dir $DATA_ROOT --outfile results/paper_traj_kz8_oua1.h5  --ndims 8 --num_frames 2 --samples_n 1000 --sigmas 0.5 0.4 0.3 0.2 0.1 0.0 --ou_alphas 1.0 --neg_modes traj --reps 15 --epochs 100 --traj_sampler full --probe_every 2
+--root_dir $DATA_ROOT --outfile results/paper_time_kz8_oua0.h5  --ndims 8 --num_frames 2 --samples_n 1000 --sigmas 0.5 0.4 0.3 0.2 0.1 0.0 --ou_alphas 0.0 --neg_modes time --reps 15 --epochs 100 --traj_sampler full --probe_every 2
+--root_dir $DATA_ROOT --outfile results/paper_time_kz8_oua1.h5  --ndims 8 --num_frames 2 --samples_n 1000 --sigmas 0.5 0.4 0.3 0.2 0.1 0.0 --ou_alphas 1.0 --neg_modes time --reps 15 --epochs 100 --traj_sampler full --probe_every 2

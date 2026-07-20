@@ -1,0 +1,36 @@
+# Python >= 3.9 recommended
+# Install with: pip install -r requirements.txt
+
+# Core deep learning
+torch>=2.0.0
+
+# Configuration management (jepa_simclr_dot_experiments)
+omegaconf>=2.3.0
+
+# Experiment tracking (jepa_simclr_dot_experiments)
+wandb>=0.16.0
+
+# HDF5 model storage (dvsib_pendulum_experiments)
+h5py>=3.9.0
+
+# Image processing (used by dvsib_pendulum_experiments/data.py)
+Pillow>=9.0.0
+
+# TLS certificate bundle for dvsib_pendulum_experiments/data.py's Zenodo
+# download (works around broken default OpenSSL cert paths on some
+# conda/HPC environments)
+certifi>=2023.0.0
+
+# Numerics and data
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Progress bars
+tqdm>=4.65.0
+
+# Plotting
+matplotlib>=3.7.0
+
+# Optional: exact cyclic colormap used for the pendulum embedding figures
+# (notebooks/reproduce_figures.ipynb falls back to matplotlib's hsv if absent)
+cmocean>=3.0.0

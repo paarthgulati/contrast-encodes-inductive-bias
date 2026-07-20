@@ -1,0 +1,54 @@
+model_type: SimCLR
+n_steps: 24
+val_n_steps: 24
+dataset_size: 10000
+dataset_noise: 3.0
+val_dataset_size: 10000
+wandb: true
+run_name: null
+run_group: changing_uniform.(3).simclr
+output_path: null
+safe_every_n_epochs: 10
+eval_mpcs: 20
+quick_debug: false
+seed: 1
+load_checkpoint_path: null
+eval_only: false
+probe_mpc: false
+dataset_static_noise: 0.0
+dataset_batch_size: 128
+dataset_static_noise_speed: 0.0
+dataset_dot_std: 1.3
+dataset_normalize: true
+simclr:
+  projector: id
+  random_projector: false
+  predictor: rnn
+  backbone_mlp: null
+  epochs: 100
+  base_lr: 1.9765958136776631
+  decoding_coeff: 0.0
+  action_coeff: 0.0
+  arch: menet5
+  embedding_size: 512
+  action_dim: 2
+  rnn_layers: 1
+  rnn_burnin: 1
+  backbone_width_factor: 2
+  normalize_z: false
+  loss_temp: 128.0
+  channels: 1
+  variant: baseline_traj_neg
+eval_at_the_end_only: false
+dataset_type: Single
+probing_cfg:
+  full_finetune: false
+  lr: 0.001
+  epochs: 30
+  epochs_enc: 30
+  schedule: null
+  prober_arch: ''
+dataset_noise_alpha: 0.9999
+dataset_ou_center_mode: global_half
+dataset_ou_mu: 0.5
+dataset_max_step: 4.0
