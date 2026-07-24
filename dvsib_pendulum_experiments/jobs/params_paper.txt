@@ -25,7 +25,7 @@
 #   --traj_sampler  'full' (all windows per trajectory) or 'grouped' (random subset)
 #   --probe_every   train theta prober every N epochs (0 to disable)
 
---root_dir $DATA_ROOT --outfile results/paper_traj_kz8_oua0.h5  --ndims 8 --num_frames 2 --samples_n 1000 --sigmas 0.5 0.4 0.3 0.2 0.1 0.0 --ou_alphas 0.0 --neg_modes traj --reps 15 --epochs 100 --traj_sampler full --probe_every 2
---root_dir $DATA_ROOT --outfile results/paper_traj_kz8_oua1.h5  --ndims 8 --num_frames 2 --samples_n 1000 --sigmas 0.5 0.4 0.3 0.2 0.1 0.0 --ou_alphas 1.0 --neg_modes traj --reps 15 --epochs 100 --traj_sampler full --probe_every 2
---root_dir $DATA_ROOT --outfile results/paper_time_kz8_oua0.h5  --ndims 8 --num_frames 2 --samples_n 1000 --sigmas 0.5 0.4 0.3 0.2 0.1 0.0 --ou_alphas 0.0 --neg_modes time --reps 15 --epochs 100 --traj_sampler full --probe_every 2
---root_dir $DATA_ROOT --outfile results/paper_time_kz8_oua1.h5  --ndims 8 --num_frames 2 --samples_n 1000 --sigmas 0.5 0.4 0.3 0.2 0.1 0.0 --ou_alphas 1.0 --neg_modes time --reps 15 --epochs 100 --traj_sampler full --probe_every 2
+--root_dir $DATA_ROOT --outfile results/paper_traj_kz8_oua0.h5  --ndims 8 --num_frames 2 --samples_n 1000 --sigmas 0.5 0.4 0.3 0.2 0.1 0.0 --ou_alphas 0.0 --neg_modes traj --reps 15 --epochs 100 --traj_sampler full --probe_every 1
+--root_dir $DATA_ROOT --outfile results/paper_traj_kz8_oua1.h5  --ndims 8 --num_frames 2 --samples_n 1000 --sigmas 0.5 0.4 0.3 0.2 0.1 0.0 --ou_alphas 1.0 --neg_modes traj --reps 15 --epochs 100 --traj_sampler full --probe_every 1
+--root_dir $DATA_ROOT --outfile results/paper_time_kz8_oua0.h5  --ndims 8 --num_frames 2 --samples_n 1000 --sigmas 0.5 0.4 0.3 0.2 0.1 0.0 --ou_alphas 0.0 --neg_modes time --reps 15 --epochs 100 --traj_sampler full --probe_every 1
+--root_dir $DATA_ROOT --outfile results/paper_time_kz8_oua1.h5  --ndims 8 --num_frames 2 --samples_n 1000 --sigmas 0.5 0.4 0.3 0.2 0.1 0.0 --ou_alphas 1.0 --neg_modes time --reps 15 --epochs 100 --traj_sampler full --probe_every 1

@@ -79,6 +79,14 @@ class Trainer:
     def __init__(self, config: TrainConfig):
         self.config = config
         self.model_config = self.config.simclr
+
+        if config.seed is None:
+            seed = random.SystemRandom().randint(0, 2**32 - 1)
+        else:
+            seed = int(config.seed)
+        seed_everything(seed)
+        config.seed = seed
+
         self.pred_ms = SimCLR(config.simclr)
         self.pred_ms = self.pred_ms.cuda()
 
@@ -93,13 +101,6 @@ class Trainer:
                 config=dataclasses.asdict(config),
             )
 
-        if config.seed is None:
-            seed = random.SystemRandom().randint(0, 2**32 - 1)
-        else:
-            seed = int(config.seed)
-
-        seed_everything(seed)
-        config.seed = seed
         wandb.config.update({"seed": seed}, allow_val_change=True)
         wandb.run.summary["seed"] = seed
 

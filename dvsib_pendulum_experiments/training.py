@@ -53,7 +53,8 @@ def train_dvsib(model, loader, x_test, y_test, tid_test, tmi_test=None,
         model : trained model
         hist  : dict with per-epoch lists
                   train_loss, train_kl, train_mi, test_mi
-                and per-checkpoint lists (length epochs // probe_every):
+                and per-checkpoint lists (length 1 + epochs // probe_every,
+                the +1 from the pre-training probe call at epoch 0):
                   probe_epochs, probe_theta_train_deg, probe_theta_test_deg
     """
     opt = torch.optim.Adam(model.parameters(), lr=lr)

@@ -17,7 +17,7 @@
 2. Edit `submit_array.sh`:
    - Replace `<YOUR_PARTITION>` with your cluster's GPU partition.
    - Replace `YOUR_CONDA_ENV` with your conda environment name.
-3. Create an output directory: `mkdir -p dvsib_pendulum_experiments/results dvsib_pendulum_experiments/logs`
+3. Create an output directory (still from inside `dvsib_pendulum_experiments/`): `mkdir -p results logs`
 
 ## Submitting the paper sweep
 

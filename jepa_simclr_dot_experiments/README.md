@@ -81,14 +81,14 @@ python supervised_baseline.py --values \
 
 ## Expected outputs
 
-Each training run logs the following to W&B every 100 gradient steps:
+Each training run logs the following to W&B:
 
-| Key | Description |
-|---|---|
-| `loss` | InfoNCE contrastive loss |
-| `learning_rate` | Current LARS learning rate |
-| `avg_eval_enc_loss` | Position-probe MSE on validation set |
-| `avg_eval_enc_loss_rmse` | RMSE (pixels) of position probe |
+| Key | Description | Logged every |
+|---|---|---|
+| `loss` | InfoNCE contrastive loss | 100 gradient steps |
+| `learning_rate` | Current LARS learning rate | 100 gradient steps |
+| `avg_eval_enc_loss` | Position-probe MSE on validation set | `safe_every_n_epochs` epochs (default 10), plus once before training and once at the last epoch |
+| `avg_eval_enc_loss_rmse` | RMSE (pixels) of position probe | same cadence as `avg_eval_enc_loss` |
 
 Runs are grouped by `run_group` in W&B. Aggregate results by querying the project via `wandb.Api()`.
 

@@ -47,8 +47,9 @@ class ConfigBase:
 
 class DataclassArgParser(argparse.ArgumentParser):
     """A class for handling dataclasses and argument parsing.
-    Closely based on Hugging Face's HfArgumentParser class,
-    extended to support recursive dataclasses.
+    Closely based on Hugging Face's HfArgumentParser class (transformers,
+    Apache License 2.0 — see THIRD_PARTY_LICENSES.md), extended to support
+    recursive dataclasses.
     """
 
     def __init__(

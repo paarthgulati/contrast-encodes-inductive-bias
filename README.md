@@ -43,19 +43,6 @@ dataset from Zenodo on first run if `dvsib_pendulum_experiments/data/` isn't
 already populated (needed to re-encode a few example trajectories for the
 embedding figures).
 
-### Figure map
-
-| Paper figure | Produced by |
-|---|---|
-| Fig. 1 (architecture schematic) | Static diagram, not code-generated |
-| Fig. 2, Fig. S2 | "Fig 2 (main text) / Fig S2 (appendix)" section |
-| Fig. 3, Fig. S1 | "Fig 3 / Fig S1" section |
-| Fig. 4, Fig. S3 | "Fig 4 / Fig S3" section |
-| Fig. 5 | "Fig 5" section |
-| Fig. S4 | "Fig S4" section |
-| Fig. S5 | "Fig S5" section |
-| Fig. S6 | "Fig S6" section |
-
 ---
 
 ## Training from scratch
@@ -155,7 +142,13 @@ for the full original notices):
 - **`dvsib_pendulum_experiments/`** adapts the DySIB architecture of:
   > K. M. Martini, E. Abdelaleem, P. Gulati, and I. Nemenman. "Information
   > bottleneck for learning the phase space of dynamics from high-dimensional
-  > experimental data." 2026.
+  > experimental data." 2026. [arXiv:2604.24662](https://arxiv.org/abs/2604.24662)
+
+- The pendulum video dataset itself is from:
+  > B. Chen, K. Huang, S. Raghupathi, I. Chandratreya, Q. Du, and H. Lipson.
+  > "Automated discovery of fundamental variables hidden in experimental
+  > data." *Nature Computational Science* 2, 433–442 (2022).
+  > [doi:10.1038/s43588-022-00281-6](https://doi.org/10.1038/s43588-022-00281-6)
 
 ---
 

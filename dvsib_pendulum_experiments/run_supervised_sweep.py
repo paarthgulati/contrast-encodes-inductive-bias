@@ -403,6 +403,12 @@ def main():
     outfile = Path(args.outfile).resolve()
     outfile.parent.mkdir(parents=True, exist_ok=True)
 
+    assert all(sn <= 1000 for sn in args.samples_n), (
+        "samples_n must be <= 1000: trials 1000:1200 are the fixed test "
+        "split, and training on data[:samples_n] would otherwise leak "
+        f"test trajectories into training (got {args.samples_n})"
+    )
+
     print("Loading data...")
     data_clean, phys = load_data(args.root_dir)
     print(f"  pixel data: {tuple(data_clean.shape)}")

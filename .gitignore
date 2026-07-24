@@ -16,5 +16,8 @@ wandb/
 logs/
 *.h5
 
+# Personal Claude Code tooling preferences (not part of the release)
+.claude/settings.local.json
+
 # OS
 .DS_Store

@@ -38,7 +38,9 @@ results.h5
                 sigma, ou_alpha, neg_mode,
                 seed, noise_seed, epochs, gamma, batch_size, input_dim,
                 prober_type, rf_expand_dim, rf_alpha
-        ├── training/   { train_loss, train_kl, train_mi, test_mi }
+        ├── training/   { train_loss, train_kl, train_mi, test_mi,
+                          probe_epochs, probe_theta_train_deg,
+                          probe_theta_test_deg }
         ├── probers/    attrs: theta_{train,test}_deg
         ├── rollout/    { what_frames, delta_greedy, delta_pred,
                           rms_theta_{greedy,pred} }
@@ -250,6 +252,19 @@ def _save_run(h5_path, run_name, params, hist, probe_metrics, rollout_arrays,
 # Data helpers
 # ─────────────────────────────────────────────────────────────────────────────
 
+def _pendulum_data_module():
+    """Load dvsib_pendulum_experiments/data.py by file path (not `import data`) so this
+    doesn't collide with jepa_simclr_dot_experiments' own `data` package when both
+    sub-projects are on sys.path at once, e.g. inside notebooks/reproduce_figures.ipynb."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "_dvsib_pendulum_data", Path(__file__).resolve().parent / "data.py"
+    )
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def load_data(root_dir):
     """
     Load pixel trajectories and physical variables.
@@ -257,11 +272,20 @@ def load_data(root_dir):
     Expects in root_dir:
         single_pendulum_all   - torch-saved tensor (1200, 60, 784), clean pixels
         phys_vars.npy         - numpy dict with aligned physical variables
+
+    If either file is missing, downloads and preprocesses the pendulum
+    dataset from Zenodo into root_dir first (see data.py).
     """
     root = Path(root_dir).resolve()
-    data = torch.load(root / "single_pendulum_all", weights_only=False)
+    tensor_path = root / "single_pendulum_all"
+    phys_path = root / "phys_vars.npy"
+    if not (tensor_path.exists() and phys_path.exists()):
+        data_mod = _pendulum_data_module()
+        raw_dir = data_mod.extract(data_mod.download(root=root), root=root)
+        data_mod.preprocess(raw_dir, root=root)
+    data = torch.load(tensor_path, weights_only=False)
     data = torch.as_tensor(data).float()
-    phys = np.load(root / "phys_vars.npy", allow_pickle=True).item()
+    phys = np.load(phys_path, allow_pickle=True).item()
     return data, phys
 
 
@@ -392,6 +416,12 @@ _DEFAULT_LR    = 1e-4
 
 def make_run_name(ndims, num_frames, samples_n, sigma, ou_alpha, neg_mode, rep,
                   noise_dist="gaussian", gamma=_DEFAULT_GAMMA, lr=_DEFAULT_LR):
+    # NOTE: this name does not encode traj_sampler, prober_type, rf_expand_dim,
+    # rf_alpha, k_per_traj, k_per_time, or standard_sampler. Re-running the
+    # same (ndims, num_frames, samples_n, sigma, ou_alpha, neg_mode, rep) with
+    # a different value for any of those produces the SAME run_name, so it
+    # will be silently skipped (without --overwrite) or silently clobber the
+    # previous run (with --overwrite). Be mindful when sweeping those params.
     name = (
         f"dz{ndims}_numF{num_frames}_sN{samples_n}"
         f"_sig{_fmt(sigma)}_oua{_fmt(ou_alpha)}_neg{neg_mode}_rep{rep}"
@@ -790,6 +820,12 @@ def main():
 
     outfile = Path(args.outfile).resolve()
     outfile.parent.mkdir(parents=True, exist_ok=True)
+
+    assert all(sn <= 1000 for sn in args.samples_n), (
+        "samples_n must be <= 1000: trials 1000:1200 are the fixed test "
+        "split, and training on data[:samples_n] would otherwise leak "
+        f"test trajectories into training (got {args.samples_n})"
+    )
 
     print("Loading data...")
     data_clean, phys = load_data(args.root_dir)

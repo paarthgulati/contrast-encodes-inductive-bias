@@ -2,7 +2,7 @@
 
 ## What this component does
 
-This sub-project trains a **Deep Variational Sequential Information Bottleneck (DVSIB)** model on a simulated pendulum dataset (1200 trials × 60 frames of 28×28 pixel observations). The model learns to compress a sliding window of past frames into a low-dimensional latent code z that is maximally informative about future frames, subject to a KL compression penalty (controlled by γ).
+This sub-project trains a **Deep Variational Symmetric Information Bottleneck (DVSIB)** model on a simulated pendulum dataset (1200 trials × 60 frames of 28×28 pixel observations). The model learns to compress a sliding window of past frames into a low-dimensional latent code z that is maximally informative about future frames, subject to a KL compression penalty (controlled by γ).
 
 Two contrastive objectives are studied:
 
@@ -13,8 +13,9 @@ OU-correlated pixel noise (parameters σ and α) is added to the clean pendulum 
 
 Adapted from the DySIB architecture of Martini, Abdelaleem, Gulati, and
 Nemenman, "Information bottleneck for learning the phase space of dynamics
-from high-dimensional experimental data" (2026), originally released under
-MIT (notice preserved in [`../THIRD_PARTY_LICENSES.md`](../THIRD_PARTY_LICENSES.md)).
+from high-dimensional experimental data" (2026,
+[arXiv:2604.24662](https://arxiv.org/abs/2604.24662)), originally released
+under MIT (notice preserved in [`../THIRD_PARTY_LICENSES.md`](../THIRD_PARTY_LICENSES.md)).
 
 ---
 
@@ -46,6 +47,12 @@ python data.py --all --root data/
 ```
 
 This fetches the [Chen et al. (2022)](https://zenodo.org/records/6653856) pendulum video dataset from Zenodo (~167 MB), downsamples 1200 trajectories from 128×128 RGB to 28×28 grayscale, and writes two files to `data/`:
+
+(`run_sweep.py` and `run_supervised_sweep.py`'s own `load_data()` will also run
+this same download+preprocess step automatically if `data/` isn't populated
+yet — pre-running it explicitly is only needed to control where/when the
+~167 MB download happens, e.g. on an HPC login node before submitting a job
+to a compute node without network egress.)
 
 - `data/single_pendulum_all` — PyTorch tensor **(1200, 60, 784)**, pixels ∈ [0,1]
 - `data/phys_vars.npy` — NumPy dict with physical labels (`theta`, `vel_theta`, `kinetic energy`, `potential energy`, …)
@@ -116,7 +123,9 @@ results.h5
 └── runs/
     └── dz{kz}_numF{T}_sN{N}_sig{σ}_oua{α}_neg{mode}_rep{r}/
         attrs:        all hyperparameters (incl. prober_type, rf_expand_dim, rf_alpha)
-        training/     train_loss, train_kl, train_mi, test_mi  [epochs]
+        training/     train_loss, train_kl, train_mi, test_mi        [epochs]
+                      probe_epochs, probe_theta_train_deg,
+                      probe_theta_test_deg                           [every probe_every epochs, plus one pre-training entry]
         probers/      theta_train_deg, theta_test_deg          (attrs)
         rollout/      what_frames, delta_greedy, delta_pred,
                       rms_theta_greedy, rms_theta_pred          [frames]
@@ -140,7 +149,7 @@ Approximate runtime: ~3 min/run on an A100 GPU (100 epochs, 1000 training trajec
 |---|---|---|
 | `--ndims` | 2 or 8 | Latent dimensionality kz |
 | `--num_frames` | 2 | Frames per sliding window |
-| `--samples_n` | 1000 | Training trajectories |
+| `--samples_n` | 1000 | Training trajectories (must be ≤ 1000: trials 1000-1200 are the fixed test split) |
 | `--sigmas` | 0.0, 0.1, 0.2, 0.3, 0.4, 0.5 | OU noise amplitude σ |
 | `--ou_alphas` | 0.0, 1.0 | OU memory α (0=white noise, 1=static) |
 | `--neg_modes` | `traj`, `time` | InfoNCE negative-sampling strategy |

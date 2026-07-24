@@ -1,3 +1,13 @@
+# Copyright (c) Facebook, Inc. and its affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+#
+# Adapted from facebookresearch/vicreg (main_vicreg.py); obtained via
+# Sobal et al.'s JEPA_SSL_NeurIPS_2022 repo, which reproduces this file
+# without a header. See THIRD_PARTY_LICENSES.md.
+
 import math
 
 import torch

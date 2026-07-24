@@ -24,6 +24,9 @@ class SimCLRConfig(ConfigBase):
     action_dim: int = 2
     rnn_layers: int = 1
     rnn_burnin: int = 1
+    # NOTE: must be 2 to match the paper's Appendix B.2 channel counts
+    # (32, 64, 64); every shipped config sets this explicitly. A width_factor
+    # of 1 silently trains a half-width encoder instead.
     backbone_width_factor: int = 1
     normalize_z: bool = False
     loss_temp: float = 1.0

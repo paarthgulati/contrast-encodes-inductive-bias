@@ -47,7 +47,7 @@ def add_ou_noise_per_trajectory(
     Args:
         data     : (n_trials, T, D) torch.Tensor or np.ndarray
         sigma    : noise standard deviation added to x
-        ou_alpha : memory parameter, typically in [0, 1)
+        ou_alpha : memory parameter, in [0, 1]
         clip     : (lo, hi) clamp range, or None to skip clamping.
                    Default (0, 1) matches pendulum-pixel range.
         seed     : RNG seed for reproducibility
@@ -59,8 +59,13 @@ def add_ou_noise_per_trajectory(
     x = torch.as_tensor(data).clone()
     if x.ndim != 3:
         raise ValueError(f"Expected (n_trials, T, D), got {tuple(x.shape)}")
-    if not (-1.0 <= ou_alpha <= 1.0):
-        raise ValueError(f"ou_alpha must be in [-1, 1], got {ou_alpha}")
+    if not (0.0 <= ou_alpha <= 1.0):
+        # Paper's Eq. 1 only defines the OU memory parameter on [0, 1]
+        # (0=white noise, 1=static); negative alpha is mathematically
+        # well-defined (anti-correlated noise) but outside the paper's model
+        # and never meaningfully used, so it's rejected rather than silently
+        # accepted.
+        raise ValueError(f"ou_alpha must be in [0, 1], got {ou_alpha}")
 
     n_trials, T, D = x.shape
     g = torch.Generator(device=x.device)
@@ -125,7 +130,7 @@ def add_ou_noise_uniform(
     Args:
         data     : (n_trials, T, D) torch.Tensor or np.ndarray
         sigma    : noise amplitude ceiling (x_noisy = x + sigma * o_t)
-        ou_alpha : memory parameter, typically in [0, 1)
+        ou_alpha : memory parameter, in [0, 1]
         clip     : (lo, hi) clamp range, or None to skip clamping.
                    Default (0, 1) matches pendulum-pixel range.
         seed     : RNG seed for reproducibility
@@ -138,8 +143,11 @@ def add_ou_noise_uniform(
     x = torch.as_tensor(data).clone()
     if x.ndim != 3:
         raise ValueError(f"Expected (n_trials, T, D), got {tuple(x.shape)}")
-    if not (-1.0 <= ou_alpha <= 1.0):
-        raise ValueError(f"ou_alpha must be in [-1, 1], got {ou_alpha}")
+    if not (0.0 <= ou_alpha <= 1.0):
+        # See add_ou_noise_per_trajectory: alpha < 0 is outside the paper's
+        # model and not meaningful here, so it's rejected rather than
+        # silently accepted.
+        raise ValueError(f"ou_alpha must be in [0, 1], got {ou_alpha}")
 
     n_trials, T, D = x.shape
     g = torch.Generator(device=x.device)

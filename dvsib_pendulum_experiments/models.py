@@ -125,7 +125,7 @@ class DeltaDecoder(nn.Module):
 
 class DVSIB(nn.Module):
     """
-    Deep Variational Sufficient Information Bottleneck for frame-sequence data.
+    Deep Variational Symmetric Information Bottleneck for frame-sequence data.
 
     Residual predictive objective (fixed):
         pred_mean = zx + delta       (delta ~ DeltaDecoder(zx))
