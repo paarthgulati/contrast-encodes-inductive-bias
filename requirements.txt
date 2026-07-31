@@ -31,6 +31,10 @@ tqdm>=4.65.0
 # Plotting
 matplotlib>=3.7.0
 
+# Running notebooks/reproduce_figures.ipynb (jupyter lab, or jupyter nbconvert
+# --execute); also provides nbconvert
+jupyterlab>=4.0.0
+
 # Optional: exact cyclic colormap used for the pendulum embedding figures
 # (notebooks/reproduce_figures.ipynb falls back to matplotlib's hsv if absent)
 cmocean>=3.0.0

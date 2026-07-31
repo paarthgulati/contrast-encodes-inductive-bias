@@ -1,7 +1,7 @@
 import data
 from typing import Optional
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import dataclasses
 from pathlib import Path
 import random
@@ -68,11 +68,11 @@ class TrainConfig(ConfigBase):
     dataset_max_step: float = 4.0
     dataset_normalize: bool = False
     dataset_fixed_seed: Optional[int] = None
-    simclr: SimCLRConfig = SimCLRConfig()
+    simclr: SimCLRConfig = field(default_factory=SimCLRConfig)
     eval_at_the_end_only: bool = False
     dataset_type: DatasetType = DatasetType.Single
 
-    probing_cfg: probing.ProbingConfig = probing.ProbingConfig()
+    probing_cfg: probing.ProbingConfig = field(default_factory=probing.ProbingConfig)
 
 
 class Trainer:
