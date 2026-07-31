@@ -100,9 +100,8 @@ class Trainer:
                 group=config.run_group,
                 config=dataclasses.asdict(config),
             )
-
-        wandb.config.update({"seed": seed}, allow_val_change=True)
-        wandb.run.summary["seed"] = seed
+            wandb.config.update({"seed": seed}, allow_val_change=True)
+            wandb.run.summary["seed"] = seed
 
         self.sample_step = 0
         self.epoch = 0

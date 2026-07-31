@@ -33,6 +33,8 @@ pip install -r ../requirements.txt   # from repo root
 # Requires Python >= 3.9, PyTorch >= 2.0
 ```
 
+A CUDA-capable GPU is required for training (`train.py`/`supervised_baseline.py` call `.cuda()` unconditionally, with no CPU fallback) — unlike `dvsib_pendulum_experiments`, which supports both.
+
 ---
 
 ## Data
