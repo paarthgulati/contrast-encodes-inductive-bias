@@ -21,7 +21,7 @@ When negatives are sampled *across* trajectories (ATN), slowly varying (high-α)
 The two sub-projects demonstrate this in different settings and use different datasets, models, and I/O pipelines. They are treated as independent codebases and do not share code, data, or checkpoints:
 
 - **`jepa_simclr_dot_experiments/`** — SimCLR-predictor JEPA on a synthetic moving-dot dataset
-- **`dvsib_pendulum_experiments/`** — DySIB on real experimental video of a rigid pendulum
+- **`dvsib_pendulum_experiments/`** — DySIB on pendulum recordings
 
 Both directories work the same way for a reader: run `notebooks/reproduce_figures.ipynb` to regenerate every figure from shipped data (no GPU, no training), or use the sub-project's own training code to reproduce the underlying sweeps from scratch.
 
